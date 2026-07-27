@@ -718,6 +718,32 @@ tfoot td {
     }
 }
 
+
+/* ============================================================
+   TABLA SIN DESPLAZAMIENTO VERTICAL
+   ============================================================ */
+.table-wrap {
+    max-height: none !important;
+    overflow-y: visible !important;
+    overflow-x: auto;
+}
+
+thead th,
+tfoot td {
+    position: static !important;
+}
+
+@media (min-width: 761px) {
+    .table-wrap {
+        overflow-x: visible;
+    }
+
+    .table-wrap table {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
 </style>
 </head>
 
