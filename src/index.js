@@ -2,41 +2,50 @@ export default {
     async fetch(request, env) {
         const url = new URL(request.url);
 
-        // =====================================================
-        // API PRIVADA PARA OBTENER EL JSON
-        // =====================================================
         if (url.pathname === "/api/datos") {
+            if (!env.DROPBOX_JSON_URL) {
+                return new Response(
+                    JSON.stringify({
+                        error: "Falta configurar DROPBOX_JSON_URL"
+                    }),
+                    {
+                        status: 500,
+                        headers: {
+                            "Content-Type": "application/json; charset=utf-8",
+                            "Cache-Control": "no-store"
+                        }
+                    }
+                );
+            }
+
             try {
-                const respuestaDropbox = await fetch(env.DROPBOX_JSON_URL, {
+                const response = await fetch(env.DROPBOX_JSON_URL, {
                     headers: {
                         Accept: "application/json"
-                    },
-                    cf: {
-                        cacheTtl: 0,
-                        cacheEverything: false
                     }
                 });
 
-                if (!respuestaDropbox.ok) {
+                if (!response.ok) {
                     return new Response(
                         JSON.stringify({
-                            error: `Error al leer Dropbox: HTTP ${respuestaDropbox.status}`
+                            error: `Dropbox respondió HTTP ${response.status}`
                         }),
                         {
                             status: 502,
                             headers: {
-                                "Content-Type": "application/json; charset=UTF-8"
+                                "Content-Type": "application/json; charset=utf-8",
+                                "Cache-Control": "no-store"
                             }
                         }
                     );
                 }
 
-                const datos = await respuestaDropbox.text();
+                const datos = await response.text();
 
                 return new Response(datos, {
                     status: 200,
                     headers: {
-                        "Content-Type": "application/json; charset=UTF-8",
+                        "Content-Type": "application/json; charset=utf-8",
                         "Cache-Control": "no-store, no-cache, must-revalidate",
                         "X-Content-Type-Options": "nosniff"
                     }
@@ -45,21 +54,19 @@ export default {
             } catch (error) {
                 return new Response(
                     JSON.stringify({
-                        error: "No fue posible obtener los datos"
+                        error: "No fue posible obtener los datos desde Dropbox"
                     }),
                     {
                         status: 500,
                         headers: {
-                            "Content-Type": "application/json; charset=UTF-8"
+                            "Content-Type": "application/json; charset=utf-8",
+                            "Cache-Control": "no-store"
                         }
                     }
                 );
             }
         }
 
-        // =====================================================
-        // SERVIR LOS ARCHIVOS HTML
-        // =====================================================
         return env.ASSETS.fetch(request);
     }
 };
