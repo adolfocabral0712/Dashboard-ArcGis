@@ -810,8 +810,8 @@ tfoot td {
     <section class="bottom-grid">
         <article class="panel chart-card">
             <div class="card-head">
-                <h2>MCS por especie</h2>
-                <span>Comparativo de especies</span>
+                <h2>Stock MMA por especie</h2>
+                <span>Sumatoria de la columna MMA</span>
             </div>
             <div class="chart-wrap"><canvas id="especieChart"></canvas></div>
         </article>
@@ -1092,13 +1092,36 @@ function renderCharts(rows) {
         }
     });
 
-    const byEspecie = groupSum(rows, "especie");
+    const mmaPorEspecieMap = new Map();
+    const mmaUnicaPorPredioEspecie = new Map();
+
+    rows.forEach(row => {
+        const clave = `${row.predio}|||${row.especie}`;
+
+        if (!mmaUnicaPorPredioEspecie.has(clave) || row.mma !== 0) {
+            mmaUnicaPorPredioEspecie.set(clave, {
+                especie: row.especie || "SIN DATO",
+                mma: row.mma
+            });
+        }
+    });
+
+    mmaUnicaPorPredioEspecie.forEach(item => {
+        mmaPorEspecieMap.set(
+            item.especie,
+            (mmaPorEspecieMap.get(item.especie) ?? 0) + item.mma
+        );
+    });
+
+    const byEspecie = [...mmaPorEspecieMap.entries()]
+        .sort((a, b) => b[1] - a[1]);
+
     especieChart = new Chart($("especieChart"), {
         type: "bar",
         data: {
             labels: byEspecie.map(x => x[0]),
             datasets: [{
-                label: "MCS",
+                label: "MMA",
                 data: byEspecie.map(x => x[1]),
                 backgroundColor: chartColors(byEspecie.length),
                 borderRadius: 6,
