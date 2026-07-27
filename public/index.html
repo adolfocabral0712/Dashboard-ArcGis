@@ -546,6 +546,178 @@ tfoot td {
     }
 }
 
+
+.estado-detalle{margin-top:14px;overflow:hidden;border:1px solid var(--border);border-radius:10px;background:rgba(7,17,31,.35)}
+.estado-detalle-head,.estado-detalle-row,.estado-detalle-total{display:grid;grid-template-columns:minmax(90px,1fr) 120px 70px;align-items:center;gap:8px}
+.estado-detalle-head{padding:9px 12px;background:#0b192a;color:#cbd5e1;font-size:10px;font-weight:800;text-transform:uppercase}
+.estado-detalle-row{padding:9px 12px;border-top:1px solid rgba(148,163,184,.10);font-size:11px}
+.estado-detalle-total{padding:10px 12px;border-top:1px solid var(--border);background:#0b192a;font-size:11px;font-weight:800}
+.estado-detalle-head span:nth-child(n+2),.estado-detalle-row span:nth-child(n+2),.estado-detalle-total span:nth-child(n+2){text-align:right}
+.estado-detalle-nombre{display:flex;align-items:center;gap:8px;font-weight:700}
+.estado-detalle-punto{width:8px;height:8px;flex:0 0 8px;border-radius:50%}
+@media(max-width:760px){
+.estado-detalle{margin-top:9px}
+.estado-detalle-head,.estado-detalle-row,.estado-detalle-total{grid-template-columns:minmax(70px,1fr) 85px 48px;gap:5px}
+.estado-detalle-head{padding:7px 8px;font-size:8px}
+.estado-detalle-row,.estado-detalle-total{padding:7px 8px;font-size:9px}
+}
+
+
+/* ============================================================
+   LISTADO A LA IZQUIERDA DEL GRÁFICO CIRCULAR
+   ============================================================ */
+.estado-layout {
+    display: grid;
+    grid-template-columns: minmax(280px, .8fr) minmax(320px, 1.2fr);
+    align-items: center;
+    gap: 18px;
+}
+
+.estado-chart-wrap {
+    height: 300px;
+}
+
+.estado-detalle {
+    margin-top: 0;
+}
+
+@media (max-width: 900px) {
+    .estado-layout {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .estado-chart-wrap {
+        height: 250px;
+    }
+}
+
+@media (max-width: 760px) {
+    .estado-layout {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .estado-detalle,
+    .estado-chart-wrap {
+        width: 100%;
+    }
+
+    .estado-chart-wrap {
+        height: 225px;
+    }
+}
+
+
+/* ============================================================
+   TARJETA AVANCE CARGA
+   ============================================================ */
+.avance-carga-wrap {
+    display: block;
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.avance-carga-card {
+    width: 100%;
+    padding: 16px 18px;
+    text-align: center;
+}
+
+.avance-carga-label {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .8px;
+}
+
+.avance-carga-valor {
+    margin-top: 8px;
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.avance-carga-detalle {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+@media (max-width: 760px) {
+    .avance-carga-wrap {
+        margin-bottom: 10px;
+    }
+
+    .avance-carga-card {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .avance-carga-label {
+        font-size: 9px;
+    }
+
+    .avance-carga-valor {
+        font-size: 28px;
+    }
+
+    .avance-carga-detalle {
+        font-size: 9px;
+    }
+}
+
+
+/* ============================================================
+   ALINEACIÓN DE TABLA PREDIO
+   ============================================================ */
+.table-wrap th:nth-child(n+2),
+.table-wrap td:nth-child(n+2) {
+    text-align: center !important;
+}
+
+.table-wrap th:first-child,
+.table-wrap td:first-child {
+    text-align: left !important;
+}
+
+
+/* ============================================================
+   AJUSTE COLUMNA PREDIO Y SEPARACIÓN ENTRE BLOQUES
+   ============================================================ */
+.table-card {
+    margin-bottom: 16px;
+}
+
+.table-wrap th:first-child,
+.table-wrap td:first-child {
+    width: 24% !important;
+    min-width: 150px !important;
+    max-width: 220px !important;
+}
+
+.table-wrap th:nth-child(2),
+.table-wrap td:nth-child(2) {
+    width: 16% !important;
+}
+
+.table-wrap th:nth-child(n+3),
+.table-wrap td:nth-child(n+3) {
+    width: 10% !important;
+}
+
+@media (max-width: 760px) {
+    .table-card {
+        margin-bottom: 10px;
+    }
+
+    .table-wrap th:first-child,
+    .table-wrap td:first-child {
+        min-width: 92px !important;
+        max-width: 118px !important;
+    }
+}
+
 </style>
 </head>
 
@@ -579,16 +751,25 @@ tfoot td {
             <button id="clearFilters" type="button">Limpiar filtros</button>
         </div>
     </section>
+
+    <section class="avance-carga-wrap">
+        <article class="panel avance-carga-card">
+            <div class="avance-carga-label">AVANCE CARGA</div>
+            <div id="avanceCargaValor" class="avance-carga-valor">0,0%</div>
+            <div id="avanceCargaDetalle" class="avance-carga-detalle">Total 0,00 / Planta 0,00</div>
+        </article>
+    </section>
+
 <section class="panel table-card">
         <div class="card-head">
-            <h2>Detalle de datos</h2>
+            <h2>PREDIO</h2>
             <span id="tableCount">0 registros</span>
         </div>
         <div class="table-wrap">
             <table>
                 <thead>
                     <tr>
-                        <th>Nombre</th>
+                        <th>PREDIO</th>
                         <th>Producto</th>
                         <th class="num">MMA</th>
                         <th class="num">Suelo</th>
@@ -607,10 +788,22 @@ tfoot td {
     <section class="main-grid">
 <article class="panel chart-card">
             <div class="card-head">
-                <h2>MCS por estado</h2>
+                <h2>AVANCE COSECHA</h2>
                 <span>Participación porcentual</span>
             </div>
-            <div class="chart-wrap"><canvas id="estadoChart"></canvas></div>
+            <div class="estado-layout">
+                <div class="estado-detalle">
+                    <div class="estado-detalle-head">
+                        <span>Estado</span><span>MCS</span><span>%</span>
+                    </div>
+                    <div id="estadoDetalleBody"></div>
+                    <div id="estadoDetalleTotal" class="estado-detalle-total"></div>
+                </div>
+
+                <div class="chart-wrap estado-chart-wrap">
+                    <canvas id="estadoChart"></canvas>
+                </div>
+            </div>
         </article>
     </section>
 
@@ -826,10 +1019,36 @@ function destroyCharts() {
     });
 }
 
+function renderEstadoDetalle(byEstado) {
+    const body = $("estadoDetalleBody");
+    const totalBox = $("estadoDetalleTotal");
+    const total = byEstado.reduce((acc, item) => acc + item[1], 0);
+    const colors = chartColors(byEstado.length);
+
+    body.innerHTML = byEstado.map((item, index) => {
+        const porcentaje = total ? (item[1] / total) * 100 : 0;
+        return `
+            <div class="estado-detalle-row">
+                <span class="estado-detalle-nombre">
+                    <span class="estado-detalle-punto" style="background:${colors[index]}"></span>
+                    ${escapeHtml(item[0])}
+                </span>
+                <span>${nf2.format(item[1])}</span>
+                <span>${porcentaje.toFixed(1).replace(".", ",")}%</span>
+            </div>`;
+    }).join("");
+
+    totalBox.innerHTML = byEstado.length ? `
+        <span>TOTAL</span>
+        <span>${nf2.format(total)}</span>
+        <span>100,0%</span>` : "";
+}
+
 function renderCharts(rows) {
     destroyCharts();
 
     const byEstado = groupSum(rows, "estado");
+    renderEstadoDetalle(byEstado);
 
     estadoChart = new Chart($("estadoChart"), {
         type: "doughnut",
@@ -895,6 +1114,56 @@ function renderCharts(rows) {
             }
         }
     });
+}
+
+function renderAvanceCarga(rows) {
+    const groupedMap = new Map();
+
+    rows.forEach(row => {
+        const key = `${row.predio}|||${row.especie}`;
+
+        if (!groupedMap.has(key)) {
+            groupedMap.set(key, {
+                mma: 0,
+                suelo: 0,
+                pie: 0,
+                planta: 0
+            });
+        }
+
+        const item = groupedMap.get(key);
+
+        if (row.mma !== 0) item.mma = row.mma;
+        if (row.planta !== 0) item.planta = row.planta;
+
+        if (row.estado.toUpperCase() === "SUELO") {
+            item.suelo += row.mcs;
+        }
+
+        if (row.estado.toUpperCase() === "EN PIE") {
+            item.pie += row.mcs;
+        }
+    });
+
+    const grouped = [...groupedMap.values()];
+
+    const total = grouped.reduce(
+        (acc, item) => acc + item.mma + item.suelo + item.pie + item.planta,
+        0
+    );
+
+    const planta = grouped.reduce(
+        (acc, item) => acc + item.planta,
+        0
+    );
+
+    const porcentaje = total > 0 ? (planta / total) * 100 : 0;
+
+    $("avanceCargaValor").textContent =
+        porcentaje.toFixed(1).replace(".", ",") + "%";
+
+    $("avanceCargaDetalle").textContent =
+        `Total ${nf2.format(total)} / Planta ${nf2.format(planta)}`;
 }
 
 function renderTable(rows) {
@@ -986,6 +1255,7 @@ function renderTable(rows) {
 function renderAll() {
     refreshDependentFilters();
     const rows = activeRows();
+    renderAvanceCarga(rows);
     renderCharts(rows);
     renderTable(rows);
 }
