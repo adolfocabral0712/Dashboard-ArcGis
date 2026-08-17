@@ -847,7 +847,7 @@ tfoot td {
 </main>
 
 <script>
-const DATA_URL = "https://dl.dropbox.com/scl/fi/utpw7rrrzvbm0bimeptdw/TableroPredio.json?rlkey=wuh2g2zkv8gfqx30lezitlfpx&dl=1";
+const DATA_URL = "/api/datos";
 
 let sourceData = [];
 let estadoChart, especieChart;
@@ -1216,7 +1216,7 @@ async function loadData() {
 
     try {
         const response = await fetch(
-            `${DATA_URL}&t=${Date.now()}`,
+            `${DATA_URL}?t=${Date.now()}`,
             { cache: "no-store" }
         );
 
