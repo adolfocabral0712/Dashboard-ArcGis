@@ -95,7 +95,7 @@ body {
 
 .filters {
     display: grid;
-    grid-template-columns: repeat(3, minmax(180px, 1fr)) auto;
+    grid-template-columns: repeat(2, minmax(180px, 1fr)) auto;
     gap: 12px;
     padding: 15px;
     margin-bottom: 16px;
@@ -769,10 +769,6 @@ tfoot td {
             <label for="especieFilter">Especie</label>
             <select id="especieFilter"><option value="">Todas</option></select>
         </div>
-        <div class="filter">
-            <label for="estadoFilter">Estado</label>
-            <select id="estadoFilter"><option value="">Todos</option></select>
-        </div>
         <div class="actions">
             <button id="clearFilters" type="button">Limpiar filtros</button>
         </div>
@@ -802,6 +798,7 @@ tfoot td {
                         <th class="num">Pie</th>
                         <th class="num">Planta</th>
                         <th class="num">Total</th>
+                        <th class="num">Área</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody"></tbody>
@@ -845,13 +842,12 @@ tfoot td {
 
 <div class="footer">
         <span id="updatedAt">Última lectura: —</span>
-        <span>Fuente: DatosArcGIS.json · actualización automática cada 60 minutos</span>
+        <span>Fuente: TableroPredio.json · actualización automática cada 60 minutos</span>
     </div>
 </main>
 
 <script>
-const DATA_URL = "/api/datos";
-const FALLBACK_DATA = [{"PREDIO": "AIGUA", "ESPECIE": "DUNNII", "ESTADO": "PILA", "MMA (inc.+15%)": null, "Total MCS ArcGis": "362,86", "Planta": null, "Area": "12.319,89"}, {"PREDIO": "AIGUA", "ESPECIE": "GLOBULUS", "ESTADO": "PILA", "MMA (inc.+15%)": null, "Total MCS ArcGis": "12.055,29", "Planta": null, "Area": "724.023,28"}, {"PREDIO": "EL OREJANO", "ESPECIE": "GLOBULUS", "ESTADO": "EN PIE", "MMA (inc.+15%)": null, "Total MCS ArcGis": "21.470,02", "Planta": null, "Area": "2.583.888,22"}, {"PREDIO": "EL OREJANO", "ESPECIE": "GLOBULUS", "ESTADO": "SUELO", "MMA (inc.+15%)": null, "Total MCS ArcGis": "7.167,97", "Planta": null, "Area": "862.721,85"}, {"PREDIO": "JEAN PALACIO", "ESPECIE": "GLOBULUS", "ESTADO": "EN PIE", "MMA (inc.+15%)": "11.714,68", "Total MCS ArcGis": "2,04", "Planta": "3.606,78", "Area": "338,48"}, {"PREDIO": "JEAN PALACIO", "ESPECIE": "GLOBULUS", "ESTADO": "PILA", "MMA (inc.+15%)": "11.714,68", "Total MCS ArcGis": "11.545,81", "Planta": "3.606,78", "Area": "1.914.681,97"}, {"PREDIO": "JEAN PALACIO", "ESPECIE": "GLOBULUS", "ESTADO": "SUELO", "MMA (inc.+15%)": "11.714,68", "Total MCS ArcGis": "0,16", "Planta": "3.606,78", "Area": "25,96"}, {"PREDIO": "MASTROPIERRO", "ESPECIE": "GLOBULUS", "ESTADO": "EN PIE", "MMA (inc.+15%)": "1.511,57", "Total MCS ArcGis": "3.192,88", "Planta": null, "Area": "397.826,38"}, {"PREDIO": "MASTROPIERRO", "ESPECIE": "GLOBULUS", "ESTADO": "PILA", "MMA (inc.+15%)": "1.511,57", "Total MCS ArcGis": "1.871,96", "Planta": null, "Area": "233.283,17"}, {"PREDIO": "MASTROPIERRO", "ESPECIE": "GLOBULUS", "ESTADO": "SUELO", "MMA (inc.+15%)": "1.511,57", "Total MCS ArcGis": "1.575,85", "Planta": null, "Area": "196.367,76"}, {"PREDIO": "NUNIEZ", "ESPECIE": "GLOBULUS", "ESTADO": "EN PIE", "MMA (inc.+15%)": "5.479,87", "Total MCS ArcGis": "0,88", "Planta": null, "Area": "145,23"}, {"PREDIO": "NUNIEZ", "ESPECIE": "GLOBULUS", "ESTADO": "PILA", "MMA (inc.+15%)": "5.479,87", "Total MCS ArcGis": "6.806,98", "Planta": null, "Area": "1.121.425,69"}, {"PREDIO": "NUNIEZ", "ESPECIE": "GLOBULUS", "ESTADO": "SUELO", "MMA (inc.+15%)": "5.479,87", "Total MCS ArcGis": "5,04", "Planta": null, "Area": "830,52"}, {"PREDIO": "QUEBRACHO - ALMEDO SAS", "ESPECIE": "GLOBULUS", "ESTADO": "CARGADO", "MMA (inc.+15%)": "179.390,40", "Total MCS ArcGis": "70.656,42", "Planta": "42.784,80", "Area": "3.879.137,50"}, {"PREDIO": "QUEBRACHO - ALMEDO SAS", "ESPECIE": "GLOBULUS", "ESTADO": "PILA", "MMA (inc.+15%)": "179.390,40", "Total MCS ArcGis": "143.002,81", "Planta": "42.784,80", "Area": "9.230.036,13"}, {"PREDIO": "QUEBRACHO - ALMEDO SAS", "ESPECIE": "GLOBULUS", "ESTADO": "SUELO", "MMA (inc.+15%)": "179.390,40", "Total MCS ArcGis": "1.305,78", "Planta": "42.784,80", "Area": "80.362,52"}, {"PREDIO": "SANTA TERESA", "ESPECIE": "DUNNII", "ESTADO": "CARGADO", "MMA (inc.+15%)": "55.947,19", "Total MCS ArcGis": "231,93", "Planta": null, "Area": "15.721,29"}, {"PREDIO": "SANTA TERESA", "ESPECIE": "DUNNII", "ESTADO": "EN PIE", "MMA (inc.+15%)": "55.947,19", "Total MCS ArcGis": "260,75", "Planta": null, "Area": "16.519,02"}, {"PREDIO": "SANTA TERESA", "ESPECIE": "DUNNII", "ESTADO": "PILA", "MMA (inc.+15%)": "55.947,19", "Total MCS ArcGis": "57.303,17", "Planta": null, "Area": "3.794.354,37"}, {"PREDIO": "SANTA TERESA", "ESPECIE": "DUNNII", "ESTADO": "SUELO", "MMA (inc.+15%)": "55.947,19", "Total MCS ArcGis": "2.527,00", "Planta": null, "Area": "158.171,62"}, {"PREDIO": "SANTA TERESA", "ESPECIE": "GLOBULUS", "ESTADO": "PILA", "MMA (inc.+15%)": "82,04", "Total MCS ArcGis": "64,52", "Planta": null, "Area": "9.358,71"}, {"PREDIO": "SANTA TERESA", "ESPECIE": "GLOBULUS", "ESTADO": "SUELO", "MMA (inc.+15%)": "82,04", "Total MCS ArcGis": "25,83", "Planta": null, "Area": "3.747,51"}, {"PREDIO": "SANTA TERESA", "ESPECIE": "MAIDENII", "ESTADO": "EN PIE", "MMA (inc.+15%)": "56.423,22", "Total MCS ArcGis": "697,95", "Planta": "34.843,85", "Area": "40.690,46"}, {"PREDIO": "SANTA TERESA", "ESPECIE": "MAIDENII", "ESTADO": "PILA", "MMA (inc.+15%)": "56.423,22", "Total MCS ArcGis": "58.120,38", "Planta": "34.843,85", "Area": "6.074.792,93"}, {"PREDIO": "SANTA TERESA", "ESPECIE": "MAIDENII", "ESTADO": "SUELO", "MMA (inc.+15%)": "56.423,22", "Total MCS ArcGis": "6.323,42", "Planta": "34.843,85", "Area": "683.409,57"}, {"PREDIO": "SANTA TERESA", "ESPECIE": "VIMINALIS", "ESTADO": "PILA", "MMA (inc.+15%)": "2.241,91", "Total MCS ArcGis": "205,00", "Planta": null, "Area": "21.242,27"}];
+const DATA_URL = "https://dl.dropbox.com/scl/fi/utpw7rrrzvbm0bimeptdw/TableroPredio.json?rlkey=wuh2g2zkv8gfqx30lezitlfpx&dl=1";
 
 let sourceData = [];
 let estadoChart, especieChart;
@@ -871,25 +867,28 @@ function parseNumber(value) {
     if (value === null || value === undefined || value === "") return 0;
     if (typeof value === "number") return Number.isFinite(value) ? value : 0;
 
-    const clean = String(value)
-        .trim()
-        .replace(/\s/g, "")
-        .replace(/\./g, "")
-        .replace(",", ".");
+    let text = String(value).trim().replace(/\s/g, "");
 
-    const parsed = Number(clean);
+    if (text.includes(",") && text.includes(".")) {
+        text = text.replace(/\./g, "").replace(",", ".");
+    } else if (text.includes(",")) {
+        text = text.replace(",", ".");
+    }
+
+    const parsed = Number(text);
     return Number.isFinite(parsed) ? parsed : 0;
 }
 
 function normalize(row) {
     return {
-        predio: String(row.PREDIO ?? "").trim(),
-        especie: String(row.ESPECIE ?? "").trim(),
-        estado: String(row.ESTADO ?? "").trim(),
-        mma: parseNumber(row["MMA (inc.+15%)"]),
-        mcs: parseNumber(row["Total MCS ArcGis"]),
-        planta: parseNumber(row.Planta),
-        area: parseNumber(row.Area)
+        predio: String(row.predio ?? row.PREDIO ?? "").trim(),
+        especie: String(row.producto ?? row.especie ?? row.ESPECIE ?? "").trim(),
+        mma: parseNumber(row.mma),
+        suelo: parseNumber(row.suelo),
+        pie: parseNumber(row.pie),
+        planta: parseNumber(row.planta),
+        total: parseNumber(row.total),
+        area: parseNumber(row.area)
     };
 }
 
@@ -901,7 +900,9 @@ function uniqueSorted(values) {
 function fillSelect(id, values, allLabel) {
     const select = $(id);
     const selected = select.value;
-    select.innerHTML = `<option value="">${allLabel}</option>` +
+
+    select.innerHTML =
+        `<option value="">${allLabel}</option>` +
         values.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join("");
 
     if (values.includes(selected)) select.value = selected;
@@ -920,69 +921,31 @@ function sum(rows, key) {
     return rows.reduce((acc, row) => acc + row[key], 0);
 }
 
-function sumUniqueByPredioEspecie(rows, key) {
-    const unique = new Map();
-
-    rows.forEach(row => {
-        const groupKey = `${row.predio}|||${row.especie}`;
-        const current = unique.get(groupKey) ?? 0;
-        if (row[key] !== 0 || current === 0) {
-            unique.set(groupKey, row[key]);
-        }
-    });
-
-    return [...unique.values()].reduce((acc, value) => acc + value, 0);
-}
-
-function groupSum(rows, groupKey, valueKey = "mcs") {
-    const grouped = new Map();
-
-    rows.forEach(row => {
-        const key = row[groupKey] || "SIN DATO";
-        grouped.set(key, (grouped.get(key) ?? 0) + row[valueKey]);
-    });
-
-    return [...grouped.entries()]
-        .sort((a, b) => b[1] - a[1]);
-}
-
 function activeRows() {
     const predio = $("predioFilter").value;
     const especie = $("especieFilter").value;
-    const estado = $("estadoFilter").value;
 
     return sourceData.filter(row =>
         (!predio || row.predio === predio) &&
-        (!especie || row.especie === especie) &&
-        (!estado || row.estado === estado)
+        (!especie || row.especie === especie)
     );
 }
 
 function refreshDependentFilters() {
     const currentPredio = $("predioFilter").value;
     const currentEspecie = $("especieFilter").value;
-    const currentEstado = $("estadoFilter").value;
 
     const forPredio = sourceData.filter(r =>
-        (!currentEspecie || r.especie === currentEspecie) &&
-        (!currentEstado || r.estado === currentEstado)
+        !currentEspecie || r.especie === currentEspecie
     );
 
     const forEspecie = sourceData.filter(r =>
-        (!currentPredio || r.predio === currentPredio) &&
-        (!currentEstado || r.estado === currentEstado)
-    );
-
-    const forEstado = sourceData.filter(r =>
-        (!currentPredio || r.predio === currentPredio) &&
-        (!currentEspecie || r.especie === currentEspecie)
+        !currentPredio || r.predio === currentPredio
     );
 
     fillSelect("predioFilter", uniqueSorted(forPredio.map(r => r.predio)), "Todos");
     fillSelect("especieFilter", uniqueSorted(forEspecie.map(r => r.especie)), "Todas");
-    fillSelect("estadoFilter", uniqueSorted(forEstado.map(r => r.estado)), "Todos");
 }
-
 
 const baseChartOptions = {
     responsive: true,
@@ -994,9 +957,7 @@ const baseChartOptions = {
                 color: "#cbd5e1",
                 boxWidth: window.innerWidth <= 760 ? 8 : 12,
                 boxHeight: window.innerWidth <= 760 ? 8 : 12,
-                font: {
-                    size: window.innerWidth <= 760 ? 9 : 12
-                },
+                font: { size: window.innerWidth <= 760 ? 9 : 12 },
                 usePointStyle: true,
                 pointStyle: "circle"
             }
@@ -1014,9 +975,7 @@ const baseChartOptions = {
                 maxRotation: 35,
                 minRotation: 0,
                 autoSkip: false,
-                font: {
-                    size: window.innerWidth <= 760 ? 9 : 12
-                }
+                font: { size: window.innerWidth <= 760 ? 9 : 12 }
             },
             grid: { color: "rgba(148,163,184,.08)" }
         },
@@ -1045,14 +1004,15 @@ function destroyCharts() {
     });
 }
 
-function renderEstadoDetalle(byEstado) {
+function renderEstadoDetalle(items) {
     const body = $("estadoDetalleBody");
     const totalBox = $("estadoDetalleTotal");
-    const total = byEstado.reduce((acc, item) => acc + item[1], 0);
-    const colors = chartColors(byEstado.length);
+    const total = items.reduce((acc, item) => acc + item[1], 0);
+    const colors = chartColors(items.length);
 
-    body.innerHTML = byEstado.map((item, index) => {
+    body.innerHTML = items.map((item, index) => {
         const porcentaje = total ? (item[1] / total) * 100 : 0;
+
         return `
             <div class="estado-detalle-row">
                 <span class="estado-detalle-nombre">
@@ -1061,28 +1021,36 @@ function renderEstadoDetalle(byEstado) {
                 </span>
                 <span>${nf2.format(item[1])}</span>
                 <span>${porcentaje.toFixed(1).replace(".", ",")}%</span>
-            </div>`;
+            </div>
+        `;
     }).join("");
 
-    totalBox.innerHTML = byEstado.length ? `
+    totalBox.innerHTML = items.length ? `
         <span>TOTAL</span>
         <span>${nf2.format(total)}</span>
-        <span>100,0%</span>` : "";
+        <span>100,0%</span>
+    ` : "";
 }
 
 function renderCharts(rows) {
     destroyCharts();
 
-    const byEstado = groupSum(rows, "estado");
-    renderEstadoDetalle(byEstado);
+    const estados = [
+        ["MMA", sum(rows, "mma")],
+        ["SUELO", sum(rows, "suelo")],
+        ["EN PIE", sum(rows, "pie")],
+        ["PLANTA", sum(rows, "planta")]
+    ].filter(item => item[1] > 0);
+
+    renderEstadoDetalle(estados);
 
     estadoChart = new Chart($("estadoChart"), {
         type: "doughnut",
         data: {
-            labels: byEstado.map(x => x[0]),
+            labels: estados.map(x => x[0]),
             datasets: [{
-                data: byEstado.map(x => x[1]),
-                backgroundColor: chartColors(byEstado.length),
+                data: estados.map(x => x[1]),
+                backgroundColor: chartColors(estados.length),
                 borderColor: "#0d1b2d",
                 borderWidth: 3,
                 hoverOffset: 7
@@ -1098,9 +1066,7 @@ function renderCharts(rows) {
                     labels: {
                         color: "#cbd5e1",
                         padding: window.innerWidth <= 760 ? 8 : 16,
-                        font: {
-                            size: window.innerWidth <= 760 ? 9 : 12
-                        },
+                        font: { size: window.innerWidth <= 760 ? 9 : 12 },
                         usePointStyle: true,
                         pointStyle: "circle"
                     }
@@ -1118,29 +1084,14 @@ function renderCharts(rows) {
         }
     });
 
-    const mmaPorEspecieMap = new Map();
-    const mmaUnicaPorPredioEspecie = new Map();
+    const mmaPorEspecie = new Map();
 
     rows.forEach(row => {
-        const clave = `${row.predio}|||${row.especie}`;
-
-        if (!mmaUnicaPorPredioEspecie.has(clave) || row.mma !== 0) {
-            mmaUnicaPorPredioEspecie.set(clave, {
-                especie: row.especie || "SIN DATO",
-                mma: row.mma
-            });
-        }
+        const especie = row.especie || "SIN DATO";
+        mmaPorEspecie.set(especie, (mmaPorEspecie.get(especie) ?? 0) + row.mma);
     });
 
-    mmaUnicaPorPredioEspecie.forEach(item => {
-        mmaPorEspecieMap.set(
-            item.especie,
-            (mmaPorEspecieMap.get(item.especie) ?? 0) + item.mma
-        );
-    });
-
-    const byEspecie = [...mmaPorEspecieMap.entries()]
-        .sort((a, b) => b[1] - a[1]);
+    const byEspecie = [...mmaPorEspecie.entries()].sort((a, b) => b[1] - a[1]);
 
     especieChart = new Chart($("especieChart"), {
         type: "bar",
@@ -1166,46 +1117,8 @@ function renderCharts(rows) {
 }
 
 function renderAvanceCarga(rows) {
-    const groupedMap = new Map();
-
-    rows.forEach(row => {
-        const key = `${row.predio}|||${row.especie}`;
-
-        if (!groupedMap.has(key)) {
-            groupedMap.set(key, {
-                mma: 0,
-                suelo: 0,
-                pie: 0,
-                planta: 0
-            });
-        }
-
-        const item = groupedMap.get(key);
-
-        if (row.mma !== 0) item.mma = row.mma;
-        if (row.planta !== 0) item.planta = row.planta;
-
-        if (row.estado.toUpperCase() === "SUELO") {
-            item.suelo += row.mcs;
-        }
-
-        if (row.estado.toUpperCase() === "EN PIE") {
-            item.pie += row.mcs;
-        }
-    });
-
-    const grouped = [...groupedMap.values()];
-
-    const total = grouped.reduce(
-        (acc, item) => acc + item.mma + item.suelo + item.pie + item.planta,
-        0
-    );
-
-    const planta = grouped.reduce(
-        (acc, item) => acc + item.planta,
-        0
-    );
-
+    const total = sum(rows, "total");
+    const planta = sum(rows, "planta");
     const porcentaje = total > 0 ? (planta / total) * 100 : 0;
 
     $("avanceCargaValor").textContent =
@@ -1219,84 +1132,48 @@ function renderTable(rows) {
     const body = $("tableBody");
     const foot = $("tableFoot");
 
-    const groupedMap = new Map();
-
-    rows.forEach(row => {
-        const key = `${row.predio}|||${row.especie}`;
-
-        if (!groupedMap.has(key)) {
-            groupedMap.set(key, {
-                nombre: row.predio,
-                producto: row.especie,
-                mma: 0,
-                suelo: 0,
-                pie: 0,
-                planta: 0
-            });
-        }
-
-        const item = groupedMap.get(key);
-
-        // MMA y Planta se repiten por estado en el JSON.
-        // Se toma un único valor por combinación Predio + Especie.
-        if (row.mma !== 0) item.mma = row.mma;
-        if (row.planta !== 0) item.planta = row.planta;
-
-        if (row.estado.toUpperCase() === "SUELO") {
-            item.suelo += row.mcs;
-        }
-
-        if (row.estado.toUpperCase() === "EN PIE") {
-            item.pie += row.mcs;
-        }
-    });
-
-    const grouped = [...groupedMap.values()]
-        .map(item => ({
-            ...item,
-            total: item.mma + item.suelo + item.pie + item.planta
-        }))
-        .sort((a, b) =>
-            a.nombre.localeCompare(b.nombre, "es") ||
-            a.producto.localeCompare(b.producto, "es")
-        );
+    const sorted = [...rows].sort((a, b) =>
+        a.predio.localeCompare(b.predio, "es") ||
+        a.especie.localeCompare(b.especie, "es")
+    );
 
     $("tableCount").textContent =
-        `${grouped.length} ${grouped.length === 1 ? "registro agrupado" : "registros agrupados"}`;
+        `${sorted.length} ${sorted.length === 1 ? "registro" : "registros"}`;
 
-    if (!grouped.length) {
-        body.innerHTML =
-            `<tr><td colspan="7" class="empty">No hay datos para los filtros seleccionados.</td></tr>`;
+    if (!sorted.length) {
+        body.innerHTML = `
+            <tr>
+                <td colspan="8" class="empty">
+                    No hay datos para los filtros seleccionados.
+                </td>
+            </tr>
+        `;
         foot.innerHTML = "";
         return;
     }
 
-    body.innerHTML = grouped.map(item => `
+    body.innerHTML = sorted.map(item => `
         <tr>
-            <td>${escapeHtml(item.nombre)}</td>
-            <td>${escapeHtml(item.producto)}</td>
+            <td>${escapeHtml(item.predio)}</td>
+            <td>${escapeHtml(item.especie)}</td>
             <td class="num">${nf2.format(item.mma)}</td>
             <td class="num">${nf2.format(item.suelo)}</td>
             <td class="num">${nf2.format(item.pie)}</td>
             <td class="num">${nf2.format(item.planta)}</td>
             <td class="num"><strong>${nf2.format(item.total)}</strong></td>
+            <td class="num">${nf2.format(item.area)}</td>
         </tr>
     `).join("");
-
-    const totalMma = grouped.reduce((acc, item) => acc + item.mma, 0);
-    const totalSuelo = grouped.reduce((acc, item) => acc + item.suelo, 0);
-    const totalPie = grouped.reduce((acc, item) => acc + item.pie, 0);
-    const totalPlanta = grouped.reduce((acc, item) => acc + item.planta, 0);
-    const totalGeneral = grouped.reduce((acc, item) => acc + item.total, 0);
 
     foot.innerHTML = `
         <tr>
             <td colspan="2">TOTAL FILTRADO</td>
-            <td class="num">${nf2.format(totalMma)}</td>
-            <td class="num">${nf2.format(totalSuelo)}</td>
-            <td class="num">${nf2.format(totalPie)}</td>
-            <td class="num">${nf2.format(totalPlanta)}</td>
-            <td class="num">${nf2.format(totalGeneral)}</td>
+            <td class="num">${nf2.format(sum(sorted, "mma"))}</td>
+            <td class="num">${nf2.format(sum(sorted, "suelo"))}</td>
+            <td class="num">${nf2.format(sum(sorted, "pie"))}</td>
+            <td class="num">${nf2.format(sum(sorted, "planta"))}</td>
+            <td class="num">${nf2.format(sum(sorted, "total"))}</td>
+            <td class="num">${nf2.format(sum(sorted, "area"))}</td>
         </tr>
     `;
 }
@@ -1304,6 +1181,7 @@ function renderTable(rows) {
 function renderAll() {
     refreshDependentFilters();
     const rows = activeRows();
+
     renderAvanceCarga(rows);
     renderCharts(rows);
     renderTable(rows);
@@ -1312,8 +1190,25 @@ function renderAll() {
 function setStatus(type, message) {
     const status = $("status");
     status.classList.remove("ok", "error");
+
     if (type) status.classList.add(type);
     $("statusText").textContent = message;
+}
+
+function formatUpdatedAt(value) {
+    if (!value) return "—";
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return String(value);
+    }
+
+    return new Intl.DateTimeFormat("es-UY", {
+        dateStyle: "short",
+        timeStyle: "medium",
+        hour12: false
+    }).format(date);
 }
 
 async function loadData() {
@@ -1321,46 +1216,47 @@ async function loadData() {
 
     try {
         const response = await fetch(
-            `${DATA_URL}?t=${Date.now()}`,
-            {
-                cache: "no-store"
-            }
+            `${DATA_URL}&t=${Date.now()}`,
+            { cache: "no-store" }
         );
 
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
 
         const json = await response.json();
-        if (!Array.isArray(json)) throw new Error("El JSON no contiene una lista");
 
-        sourceData = json
+        if (!json || !Array.isArray(json.registros)) {
+            throw new Error("El JSON no contiene la propiedad registros[]");
+        }
+
+        sourceData = json.registros
             .map(normalize)
-            .filter(row => row.estado.toUpperCase() !== "CARGADO");
+            .filter(row => row.predio || row.especie);
+
         setStatus("ok", "Datos en línea");
+
+        $("updatedAt").textContent =
+            `Datos actualizados: ${formatUpdatedAt(json.actualizado)}`;
+
+        renderAll();
+
     } catch (error) {
-        console.warn("No se pudo leer Dropbox. Se usa la copia incorporada.", error);
-        sourceData = FALLBACK_DATA
-            .map(normalize)
-            .filter(row => row.estado.toUpperCase() !== "CARGADO");
-        setStatus("error", "Copia local de respaldo");
+        console.error("No fue posible cargar TableroPredio.json:", error);
+        sourceData = [];
+        setStatus("error", "Error al cargar datos");
+        $("updatedAt").textContent = "Datos actualizados: —";
+        renderAll();
     }
-
-    $("updatedAt").textContent =
-        `Última lectura: ${new Intl.DateTimeFormat("es-UY", {
-            dateStyle: "short",
-            timeStyle: "medium"
-        }).format(new Date())}`;
-
-    renderAll();
 }
 
-["predioFilter", "especieFilter", "estadoFilter"].forEach(id => {
+["predioFilter", "especieFilter"].forEach(id => {
     $(id).addEventListener("change", renderAll);
 });
 
 $("clearFilters").addEventListener("click", () => {
     $("predioFilter").value = "";
     $("especieFilter").value = "";
-    $("estadoFilter").value = "";
     renderAll();
 });
 
