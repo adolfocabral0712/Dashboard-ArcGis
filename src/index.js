@@ -53,7 +53,9 @@ export default {
 
                 const texto = await respuestaDropbox.text();
 
-                // Verificar que Dropbox realmente devolvió un JSON.
+                // =====================================================
+                // CONVERTIR RESPUESTA DE DROPBOX A JSON
+                // =====================================================
                 let datos;
 
                 try {
@@ -74,10 +76,29 @@ export default {
                     );
                 }
 
-                if (!Array.isArray(datos)) {
+                // =====================================================
+                // VALIDAR NUEVA ESTRUCTURA DEL JSON
+                //
+                // {
+                //   "actualizado": "...",
+                //   "cantidadRegistros": 11,
+                //   "registros": [...]
+                // }
+                // =====================================================
+                if (
+                    !datos ||
+                    typeof datos !== "object" ||
+                    Array.isArray(datos) ||
+                    !Array.isArray(datos.registros)
+                ) {
                     return new Response(
                         JSON.stringify({
-                            error: "El archivo JSON no contiene una lista de registros"
+                            error: "El archivo JSON no contiene la estructura esperada",
+                            estructuraEsperada: {
+                                actualizado: "fecha/hora",
+                                cantidadRegistros: "número",
+                                registros: []
+                            }
                         }),
                         {
                             status: 502,
@@ -89,6 +110,9 @@ export default {
                     );
                 }
 
+                // =====================================================
+                // DEVOLVER EL JSON COMPLETO AL DASHBOARD
+                // =====================================================
                 return new Response(
                     JSON.stringify(datos),
                     {
@@ -96,6 +120,8 @@ export default {
                         headers: {
                             "Content-Type": "application/json; charset=utf-8",
                             "Cache-Control": "no-store, no-cache, must-revalidate",
+                            "Pragma": "no-cache",
+                            "Expires": "0",
                             "X-Content-Type-Options": "nosniff"
                         }
                     }
