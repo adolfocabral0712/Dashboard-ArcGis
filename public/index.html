@@ -1116,6 +1116,37 @@ function renderCharts(rows) {
         options: {
             ...baseChartOptions,
             indexAxis: "y",
+
+            // Toda la franja horizontal de cada especie queda activa.
+            // Al pasar el mouse o tocar cualquier punto de esa fila,
+            // se muestra únicamente la especie correspondiente.
+            interaction: {
+                mode: "index",
+                axis: "y",
+                intersect: false
+            },
+
+            hover: {
+                mode: "index",
+                axis: "y",
+                intersect: false
+            },
+
+            plugins: {
+                ...baseChartOptions.plugins,
+                tooltip: {
+                    enabled: true,
+                    mode: "index",
+                    axis: "y",
+                    intersect: false,
+                    animation: false,
+                    callbacks: {
+                        title: items => items.length ? items[0].label : "",
+                        label: ctx => `MMA: ${nf2.format(ctx.raw)}`
+                    }
+                }
+            },
+
             scales: {
                 x: baseChartOptions.scales.y,
                 y: baseChartOptions.scales.x
