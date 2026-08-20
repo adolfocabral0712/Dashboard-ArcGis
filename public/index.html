@@ -842,7 +842,6 @@ tfoot td {
 
 <div class="footer">
         <span id="updatedAt">Última lectura: —</span>
-        <span>Fuente: TableroPredio.json · actualización automática cada 60 minutos</span>
     </div>
 </main>
 
@@ -950,7 +949,12 @@ function refreshDependentFilters() {
 const baseChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    interaction: { mode: "index", intersect: false },
+    interaction: { mode: "nearest", axis: "xy", intersect: false },
+    animation: false,
+    hover: {
+        mode: "nearest",
+        intersect: false
+    },
     plugins: {
         legend: {
             labels: {
@@ -963,6 +967,10 @@ const baseChartOptions = {
             }
         },
         tooltip: {
+            enabled: true,
+            mode: "nearest",
+            intersect: false,
+            animation: false,
             callbacks: {
                 label: ctx => `${ctx.dataset.label || ctx.label}: ${nf2.format(ctx.raw)}`
             }
@@ -1204,11 +1212,14 @@ function formatUpdatedAt(value) {
         return String(value);
     }
 
-    return new Intl.DateTimeFormat("es-UY", {
-        dateStyle: "short",
-        timeStyle: "medium",
-        hour12: false
-    }).format(date);
+    const dia = String(date.getDate()).padStart(2, "0");
+    const mes = String(date.getMonth() + 1).padStart(2, "0");
+    const anio = String(date.getFullYear()).slice(-2);
+    const hora = String(date.getHours()).padStart(2, "0");
+    const minuto = String(date.getMinutes()).padStart(2, "0");
+    const segundo = String(date.getSeconds()).padStart(2, "0");
+
+    return `${dia}/${mes}/${anio} ${hora}:${minuto}:${segundo}`;
 }
 
 async function loadData() {
