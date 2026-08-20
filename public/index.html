@@ -1040,6 +1040,38 @@ function renderEstadoDetalle(items) {
     ` : "";
 }
 
+
+const valorFinBarraPlugin = {
+    id: "valorFinBarra",
+    afterDatasetsDraw(chart) {
+        if (chart.canvas.id !== "especieChart") return;
+
+        const { ctx } = chart;
+        const meta = chart.getDatasetMeta(0);
+
+        ctx.save();
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "12px Inter, Segoe UI, Arial, sans-serif";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+
+        meta.data.forEach((bar, index) => {
+            const value = chart.data.datasets[0].data[index];
+            const texto = nf2.format(value);
+
+            ctx.fillText(
+                texto,
+                bar.x + 8,
+                bar.y
+            );
+        });
+
+        ctx.restore();
+    }
+};
+
+Chart.register(valorFinBarraPlugin);
+
 function renderCharts(rows) {
     destroyCharts();
 
@@ -1135,20 +1167,21 @@ function renderCharts(rows) {
             plugins: {
                 ...baseChartOptions.plugins,
                 tooltip: {
-                    enabled: true,
-                    mode: "index",
-                    axis: "y",
-                    intersect: false,
-                    animation: false,
-                    callbacks: {
-                        title: items => items.length ? items[0].label : "",
-                        label: ctx => `MMA: ${nf2.format(ctx.raw)}`
-                    }
+                    enabled: false
+                }
+            },
+
+            layout: {
+                padding: {
+                    right: 90
                 }
             },
 
             scales: {
-                x: baseChartOptions.scales.y,
+                x: {
+                    ...baseChartOptions.scales.y,
+                    grace: "8%"
+                },
                 y: baseChartOptions.scales.x
             }
         }
