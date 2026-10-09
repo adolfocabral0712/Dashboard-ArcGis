@@ -744,6 +744,19 @@ tfoot td {
     }
 }
 
+/* Enlaces para filtrar por predio desde la tabla. */
+.predio-link {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+.predio-link:hover { color: var(--text); }
+.predio-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 3px;
+}
 </style>
 </head>
 
@@ -1226,7 +1239,7 @@ function renderTable(rows) {
 
     body.innerHTML = sorted.map(item => `
         <tr>
-            <td>${escapeHtml(item.predio)}</td>
+            <td>${item.predio ? `<a href="#predioFilter" class="predio-link" data-predio="${escapeHtml(item.predio)}" aria-label="${escapeHtml('Filtrar por predio ' + item.predio)}">${escapeHtml(item.predio)}</a>` : ''}</td>
             <td>${escapeHtml(item.especie)}</td>
             <td class="num">${nf2.format(item.mma)}</td>
             <td class="num">${nf2.format(item.suelo)}</td>
@@ -1324,6 +1337,16 @@ async function loadData() {
         renderAll();
     }
 }
+
+$("tableBody").addEventListener("click", event => {
+    const enlace = event.target.closest("a.predio-link");
+    if (!enlace) return;
+
+    event.preventDefault();
+    $("predioFilter").value = enlace.dataset.predio;
+    renderAll();
+    $("predioFilter").focus({ preventScroll: true });
+});
 
 ["predioFilter", "especieFilter"].forEach(id => {
     $(id).addEventListener("change", renderAll);
